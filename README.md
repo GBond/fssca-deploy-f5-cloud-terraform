@@ -22,7 +22,7 @@ You can choose to run this from your workstation or a container. Follow the inst
 # Using a Docker container
 The port 8089 is opened in order to use the gui of the locust load generating tool should you choose to use it.
 - install Docker Desktop (https://www.docker.com/products/docker-desktop)
-- `docker run -it -v $(pwd):/workspace -p 8089:8089 mmenger/tfdemoenv:1.6.2 /bin/bash`
+- `docker run -it -v $(pwd):/workspace -p 8089:8089 mmenger/tfdemoenv:latest /bin/bash`
 
 # Required Resource
 This example creates the following resources inside of AWS.  Please ensure your IAM user or IAM Role has privileges to create these objects.
