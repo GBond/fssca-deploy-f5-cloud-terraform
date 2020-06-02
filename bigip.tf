@@ -58,9 +58,9 @@ module "bigip" {
   ]
 
 
-  vpc_public_subnet_ids  = module.vpc.public_subnets
-  vpc_private_subnet_ids = module.vpc.private_subnets
-  vpc_mgmt_subnet_ids    = module.vpc.database_subnets
+  vpc_public_subnet_ids  = var.public_subnets
+  vpc_private_subnet_ids = var.private_subnets
+  vpc_mgmt_subnet_ids    = var.private_subnets
   }
 
 
@@ -72,7 +72,7 @@ module "bigip_sg" {
 
   name        = format("%s-bigip-%s", var.prefix, random_id.id.hex)
   description = "Security group for BIG-IP Demo"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_cidr_blocks = [var.allowed_app_cidr]
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
@@ -97,7 +97,7 @@ module "bigip_mgmt_sg" {
 
   name        = format("%s-bigip-mgmt-%s", var.prefix, random_id.id.hex)
   description = "Security group for BIG-IP Demo"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_cidr_blocks = [var.allowed_mgmt_cidr]
   ingress_rules       = ["https-443-tcp", "https-8443-tcp", "ssh-tcp"]

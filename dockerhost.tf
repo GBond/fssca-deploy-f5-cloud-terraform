@@ -22,7 +22,6 @@ module "dockerhost" {
   instance_count = length(var.azs)
 
   ami                         = data.aws_ami.latest-ubuntu-docker.id
-  associate_public_ip_address = false
   instance_type               = var.ec2_ubuntu_type
   root_block_device = [
       {
@@ -33,7 +32,7 @@ module "dockerhost" {
   key_name                    = var.ec2_key_name
   monitoring                  = false
   vpc_security_group_ids      = [module.dockerhost_sg.this_security_group_id]
-  subnet_ids                  = module.vpc.private_subnets
+  subnet_ids                  = var.private_subnets
 
 
   user_data = templatefile("${path.module}/dockerhost.userdata.tmpl", {})
@@ -53,7 +52,7 @@ module "dockerhost_sg" {
 
   name        = format("%s-dockerhost-%s", var.prefix, random_id.id.hex)
   description = "Security group for BIG-IP Demo"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_cidr_blocks = [var.cidr]
   ingress_rules       = ["ssh-tcp"]

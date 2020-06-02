@@ -8,10 +8,12 @@ terraform {
 #
 # Configure AWS provider
 #
-provider "aws" {
-  region     = var.region
-  access_key = var.AccessKeyID
-  secret_key = var.SecretAccessKey
+provider aws {
+  region                 = var.region
+  profile                = var.aws_profile # alternatively, set AWS_PROFILE environment variable.
+  assume_role {
+    role_arn             = var.aws_auth_assume_role_arn
+  }
 }
 
 #
@@ -20,5 +22,3 @@ provider "aws" {
 resource "random_id" "id" {
   byte_length = 2
 }
-
-
