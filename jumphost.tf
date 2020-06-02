@@ -24,12 +24,11 @@ module "jumphost" {
   instance_count = length(var.azs)
 
   ami                         = data.aws_ami.latest-ubuntu.id
-  associate_public_ip_address = true
   instance_type               = var.ec2_ubuntu_type
   key_name                    = var.ec2_key_name
   monitoring                  = false
   vpc_security_group_ids      = [module.jumphost_sg.this_security_group_id]
-  subnet_ids                  = module.vpc.public_subnets
+  subnet_ids                  = var.public_subnets
 
 
   # build user_data file from template
@@ -53,7 +52,7 @@ module "jumphost_sg" {
 
   name        = format("%s-jumphost-%s", var.prefix, random_id.id.hex)
   description = "Security group for BIG-IP Demo"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_cidr_blocks = [var.allowed_mgmt_cidr]
   ingress_rules       = ["https-443-tcp", "ssh-tcp"]
@@ -112,7 +111,7 @@ resource "null_resource" "transfer" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = file(var.ec2_key_file)
-      host        = module.jumphost.public_ip[count.index]
+      host        = module.jumphost.private_ip[count.index]
     }
   }
 }
@@ -121,7 +120,7 @@ resource "null_resource" "transfer" {
 
 resource "aws_eip" "juiceshop" {
   count                     = length(var.azs)
-  # an occasional race condition with between creating the ElasticIP addresses 
+  # an occasional race condition with between creating the ElasticIP addresses
   # and the BIG-IP instances occurs causing the following error
   # Error: Failure associating EIP: IncorrectInstanceState: The pending-instance-creation instance to which 'eni-xxxxxxxxxxxxxxxxx' is attached is not in a valid state for this operation
   # https://github.com/terraform-providers/terraform-provider-aws/issues/6189
@@ -138,7 +137,7 @@ resource "aws_eip" "juiceshop" {
 
 resource "aws_eip" "grafana" {
   count                     = length(var.azs)
-  # an occasional race condition with between creating the ElasticIP addresses 
+  # an occasional race condition with between creating the ElasticIP addresses
   # and the BIG-IP instances occurs causing the following error
   # Error: Failure associating EIP: IncorrectInstanceState: The pending-instance-creation instance to which 'eni-xxxxxxxxxxxxxxxxx' is attached is not in a valid state for this operation
   # https://github.com/terraform-providers/terraform-provider-aws/issues/6189

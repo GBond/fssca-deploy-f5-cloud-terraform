@@ -1,9 +1,4 @@
-output "vpc" {
-  description = "AWS VPC ID for the created VPC"
-  value       = module.vpc.vpc_id
-}
-
-output "bigip_mgmt_public_ips" {
+output "bigip_mgmt_private_ips" {
   description = "Public IP addresses for the BIG-IP management interfaces"
   value       = module.bigip.mgmt_public_ips
 }
@@ -20,7 +15,7 @@ output "bigip_password" {
 
 output "jumphost_ip" {
   description = "ip address of jump host"
-  value       = module.jumphost.public_ip
+  value       = module.jumphost.private_ip
 }
 
 output "ec2_key_name" {
@@ -29,9 +24,9 @@ output "ec2_key_name" {
 }
 
 output "juiceshop_ip" {
-  value = aws_eip.juiceshop[*].public_ip
+  value = aws_eip.juiceshop[*].private_ip
 }
 
 output "grafana_ip" {
-  value = aws_eip.grafana[*].public_ip
+  value = aws_eip.grafana[*].private_ip
 }

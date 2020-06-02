@@ -1,6 +1,3 @@
-variable "AccessKeyID" {}
-
-variable "SecretAccessKey" {}
 
 variable "prefix" {
   default = "tf-aws-bigip"
@@ -8,8 +5,19 @@ variable "prefix" {
 ## Europe Regions need oder Jumphost and BigIP Instance Typs1
 ## Uncomment needed region below
 
-# US (Oregon)
+variable aws_profile {
+  type        = string
+  description = "AWS profile."
+}
+
+variable aws_auth_assume_role_arn {
+  type        = string
+  description = "Role ARN for role to assume."
+}
+
 variable "region" {
+  type        = string
+  description = "AWS region."
   default = "us-east-1"
 }
 
@@ -68,4 +76,17 @@ variable "ec2_key_name" {
 }
 
 variable "ec2_key_file" {
+}
+
+variable vpc_id {
+  type        = string
+  description = "VPC ID for existing VPC"
+}
+
+variable private_subnets {
+  type        = list(string)
+}
+
+variable public_subnets {
+  type        = list(string)
 }
