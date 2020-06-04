@@ -85,8 +85,27 @@ variable vpc_id {
 
 variable private_subnets {
   type        = list(string)
+  description = ""
 }
 
 variable public_subnets {
   type        = list(string)
+  description = ""
+}
+
+variable mgmt_subnets {
+  type        = list(string)
+  description = ""
+}
+
+variable ubuntu_ami_id {
+  type        = string
+  description = "Ubuntu 18.04 AMI ID"
+  default     = "ami-06ffade19910cbfc0"
+}
+
+variable bigip_ami {
+  type        = string
+  description = "F5 BIGIP-15.* PAYG-Best 200Mbps* AMI ID"
+  default     = "ami-06ffade19910cbfc0"
 }
