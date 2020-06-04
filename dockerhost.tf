@@ -1,17 +1,17 @@
-data "aws_ami" "latest-ubuntu-docker" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
+// data "aws_ami" "latest-ubuntu-docker" {
+//   most_recent = true
+//   owners      = ["099720109477"] # Canonical
+//
+//   filter {
+//     name = "name"
+//     values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+//   }
+//
+//   filter {
+//     name   = "virtualization-type"
+//     values = ["hvm"]
+//   }
+// }
 
 
 module "dockerhost" {
@@ -21,7 +21,7 @@ module "dockerhost" {
   name           = format("%s-demo-dockerhost-%s", var.prefix, random_id.id.hex)
   instance_count = length(var.azs)
 
-  ami                         = data.aws_ami.latest-ubuntu-docker.id
+  ami                         = var.ubuntu_ami_id
   instance_type               = var.ec2_ubuntu_type
   root_block_device = [
       {

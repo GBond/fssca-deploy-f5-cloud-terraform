@@ -1,20 +1,17 @@
-
-
-data "aws_ami" "latest-ubuntu" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
+// data "aws_ami" "latest-ubuntu" {
+//   most_recent = true
+//   owners      = ["099720109477"] # Canonical
+//
+//   filter {
+//     name = "name"
+//     values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+//   }
+//
+//   filter {
+//     name   = "virtualization-type"
+//     values = ["hvm"]
+//   }
+// }
 
 module "jumphost" {
   source  = "terraform-aws-modules/ec2-instance/aws"
@@ -23,7 +20,7 @@ module "jumphost" {
   name           = format("%s-demo-jumphost-%s", var.prefix, random_id.id.hex)
   instance_count = length(var.azs)
 
-  ami                         = data.aws_ami.latest-ubuntu.id
+  ami                         = var.ubuntu_ami_id # data.aws_ami.latest-ubuntu.id
   instance_type               = var.ec2_ubuntu_type
   key_name                    = var.ec2_key_name
   monitoring                  = false
